@@ -21,14 +21,14 @@ output:
     css: styles.css
 
 navbar:
-  title: "HOMEEE"
   type: default # change nav bar type - dependent upon theme
-  href: index.html
-  icon: # https://fontawesome.com/icons?d=gallery
 
   left:
+    - text: "Home"
+      href: https://mattlee821.github.io/
+    - text: "About"
+      href: index.html
     - text: "Scripts"
-      icon: 
       menu:
         - text: "Overview"
           href: 001_a_scripts-overview.html
