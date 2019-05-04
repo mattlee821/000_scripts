@@ -1,0 +1,107 @@
+name: "000_scripts"
+output_dir: "."
+
+output:
+  html_document:
+    theme: flatly # overall look of website - https://bootswatch.com/3/
+    
+    toc: true  # table of contents
+    toc_float:  # table of contents - floating on screen and follows as you scroll
+        smooth_scroll: false
+    number_sections: true # number the sections of the toc
+    
+    df_print: paged # type of data frame printing
+    
+    code_download: true # allow download of underlying .Rmd
+    
+    highlighter: null
+    
+    include:
+      after_body: _footer.html
+    css: styles.css
+
+navbar:
+  title: "HOMEEE"
+  type: default # change nav bar type - dependent upon theme
+  href: index.html
+  icon: # https://fontawesome.com/icons?d=gallery
+
+  left:
+    - text: "Scripts"
+      icon: 
+      menu:
+        - text: "Overview"
+          href: 001_a_scripts-overview.html
+        - text: "---------"
+        - text: "001_"
+          href: 001_b_
+        - text: "002_"
+          href: 001_c_
+        - text: "003_"
+          href: 001_d_
+        - text: "004_"
+          href: 001_e_
+          
+    - text: "Plots"
+      icon: 
+      menu:
+        - text: "Overview"
+          href: 002_a_plots-overview.html
+        - text: "---------"
+        - text: "001_Line-plots"
+          href: 002_b_line-plots.html
+        - text: "002_Scatter-plots"
+          href: 002_c_scatter-plots.html
+        - text: "003_Histograms"
+          href: 002_d_histogram.html
+        - text: "004_Density-plots"
+          href: 002_e_density-plots.html
+        - text: "005_Violin-plots"
+          href: 002_f_violin-plots.html
+        - text: "006_Hexbin-plots"
+          href: 002_g_hexbin-plots.html
+        - text: "007_Heatmaps"
+          href: 002_h_heatmaps.html
+        - text: "008_Forestplots"
+          href: 002_i_forestplots.html
+        - text: "009_Manhattan-plots"
+          href: 002_j_manhattan-plots.html
+        - text: "010_QQ-plots"
+          href: 002_k_qq-plots.html
+          
+          
+    - text: "Circos plots"
+      icon: 
+      menu:
+        - text: "Overview"
+          href: 003_a_circos-overview.html
+        - text: "---------"
+        - text: "001_"
+          href: 003_b_
+        - text: "002_"
+          href: 003_c_
+        - text: "003_"
+          href: 003_d_
+        - text: "004_"
+          href: 003_e_
+        - text: "005_"
+          href: 003_f_
+        - text: "006_"
+          href: 003_g_
+          
+          
+          
+          
+  
+  right:
+    - icon: fa-university
+      href: https://research-information.bristol.ac.uk/en/persons/matthew-lee(185b3727-7dbd-473e-8739-64707af1d160).html
+    - icon: fa-researchgate
+      href: https://www.researchgate.net/profile/Matthew_Lee41
+    - icon: fa-google
+      href: https://scholar.google.co.uk/citations?hl=en&user=uAAbf8kAAAAJ
+    - icon: fa-github
+      href: https://github.com/mattlee821/
+    - icon: fa-twitter
+      href: https://twitter.com/Science_Matt
+
