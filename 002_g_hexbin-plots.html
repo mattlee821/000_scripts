@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Hexbin plots</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("002_g_hexbin-plots.Rmd");
+});
+</script>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOMEEE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Scripts
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="001_a_scripts-overview.html">Overview</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="001_b_">001_</a>
+    </li>
+    <li>
+      <a href="001_c_">002_</a>
+    </li>
+    <li>
+      <a href="001_d_">003_</a>
+    </li>
+    <li>
+      <a href="001_e_">004_</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Plots
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="002_a_plots-overview.html">Overview</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="002_b_line-plots.html">001_Line-plots</a>
+    </li>
+    <li>
+      <a href="002_c_scatter-plots.html">002_Scatter-plots</a>
+    </li>
+    <li>
+      <a href="002_d_histogram.html">003_Histograms</a>
+    </li>
+    <li>
+      <a href="002_e_density-plots.html">004_Density-plots</a>
+    </li>
+    <li>
+      <a href="002_f_violin-plots.html">005_Violin-plots</a>
+    </li>
+    <li>
+      <a href="002_g_hexbin-plots.html">006_Hexbin-plots</a>
+    </li>
+    <li>
+      <a href="002_h_heatmaps.html">007_Heatmaps</a>
+    </li>
+    <li>
+      <a href="002_i_forestplots.html">008_Forestplots</a>
+    </li>
+    <li>
+      <a href="002_j_manhattan-plots.html">009_Manhattan-plots</a>
+    </li>
+    <li>
+      <a href="002_k_qq-plots.html">010_QQ-plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Circos plots
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="003_a_circos-overview.html">Overview</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="003_b_">001_</a>
+    </li>
+    <li>
+      <a href="003_c_">002_</a>
+    </li>
+    <li>
+      <a href="003_d_">003_</a>
+    </li>
+    <li>
+      <a href="003_e_">004_</a>
+    </li>
+    <li>
+      <a href="003_f_">005_</a>
+    </li>
+    <li>
+      <a href="003_g_">006_</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://research-information.bristol.ac.uk/en/persons/matthew-lee(185b3727-7dbd-473e-8739-64707af1d160).html">
+    <span class="fa fa-university"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.researchgate.net/profile/Matthew_Lee41">
+    <span class="fa fa-researchgate"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://scholar.google.co.uk/citations?hl=en&amp;user=uAAbf8kAAAAJ">
+    <span class="fa fa-google"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/mattlee821/">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/Science_Matt">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Hexbin plots</h1>
+
+</div>
+
+
+<hr />
+<p>Page last updated: 04 May, 2019</p>
+<p> </p>
+<div id="hexbins" class="section level1 tabset">
+<h1>Examples</h1>
+<div id="hexbin" class="section level2">
+<h2>Hexbin</h2>
+<pre class="r"><code>##### Heatmap hexbin
+ggplot(data = movies, 
+       aes(x = votes, y = rating)) +
+  geom_hex() +
+  scale_fill_gradientn(colours = continuous_wes_pal, 
+                      breaks = c(0, 2500, 5000),
+                      limits = c(0, 5000),
+                      guide = &quot;colourbar&quot;) +
+  guides(fill = guide_colourbar(barwidth = 15, 
+                                barheight = 1,
+                                ticks = FALSE,
+                                title = &quot;&quot;,
+                                label.hjust = 1)) +
+  my_theme() </code></pre>
+<p><img src="002_g_hexbin-plots_files/figure-html/hexbin-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSGV4YmluIHBsb3RzIgpvdXRwdXQ6CiAgaHRtbF9kb2N1bWVudDoKICAgIHRvYzogZmFsc2UKICAgIG51bWJlcl9zZWN0aW9uczogZmFsc2UKICAgIGRmX3ByaW50OiBwYWdlZAogICAgY29kZV9kb3dubG9hZDogdHJ1ZQogICAgaGlnaGxpZ2h0ZXI6IG51bGwKLS0tCgpgYGB7ciBzZXR1cCwgZXZhbD1UUlVFLCBpbmNsdWRlPUZBTFNFLCBlY2hvPUZBTFNFLCBlcnJvcj1GQUxTRSwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRSwgY2FjaGU9VFJVRSwgZmlnLmFsaWduPSdjZW50ZXInLCBjb21tZW50PSIifQpjaG9vc2VDUkFObWlycm9yKGdyYXBoaWNzPUZBTFNFLCBpbmQ9MTMzKQpzb3VyY2UoInNvdXJjZS9wbG90cy1vdmVydmlldy5SIikKYGBgCl9fXwoKUGFnZSBsYXN0IHVwZGF0ZWQ6IGByIGZvcm1hdChTeXMudGltZSgpLCAnJWQgJUIsICVZJylgCgpcICAKCiMgRXhhbXBsZXMgeyNoZXhiaW5zIC50YWJzZXR9CgojIyBIZXhiaW4geyNoZXhiaW59CmBgYHtyIGhleGJpbiwgZXZhbD1UUlVFLCBpbmNsdWRlPVRSVUUsIGVjaG89VFJVRSwgZXJyb3I9RkFMU0UsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0UsIGNhY2hlPVRSVUUsIGZpZy5hbGlnbj0nY2VudGVyJywgY29tbWVudD0iIn0KIyMjIyMgSGVhdG1hcCBoZXhiaW4KZ2dwbG90KGRhdGEgPSBtb3ZpZXMsIAogICAgICAgYWVzKHggPSB2b3RlcywgeSA9IHJhdGluZykpICsKICBnZW9tX2hleCgpICsKICBzY2FsZV9maWxsX2dyYWRpZW50bihjb2xvdXJzID0gY29udGludW91c193ZXNfcGFsLCAKICAgICAgICAgICAgICAgICAgICAgIGJyZWFrcyA9IGMoMCwgMjUwMCwgNTAwMCksCiAgICAgICAgICAgICAgICAgICAgICBsaW1pdHMgPSBjKDAsIDUwMDApLAogICAgICAgICAgICAgICAgICAgICAgZ3VpZGUgPSAiY29sb3VyYmFyIikgKwogIGd1aWRlcyhmaWxsID0gZ3VpZGVfY29sb3VyYmFyKGJhcndpZHRoID0gMTUsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJhcmhlaWdodCA9IDEsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGlja3MgPSBGQUxTRSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0aXRsZSA9ICIiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhYmVsLmhqdXN0ID0gMSkpICsKICBteV90aGVtZSgpIApgYGA=</div>
+<footer role="contentinfo" id="site-footer">
+
+<!-- /.bottom-menu -->
+	<p class="copyright">&#169; 2019,
+		powered by <a href="http://www.r-project.org">R</a> + <a href="http://rmarkdown.rstudio.com">RMarkdown</a> + <a href="http://github.com">Github</a>.</p>
+</footer>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
